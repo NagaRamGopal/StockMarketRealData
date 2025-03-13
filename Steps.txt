@@ -1,2 +1,1 @@
 Step-1 Collect data from stock exchange markets.
-	*Do research what are the 
