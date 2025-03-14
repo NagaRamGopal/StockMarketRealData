@@ -2,6 +2,7 @@ import pandas as pd
 import yfinance as yf
 from tqdm import tqdm
 from datetime import datetime, timedelta
+import pytz  # Add this for timezone handling
 
 class Code:
     def Data_Collection(self):
@@ -17,8 +18,9 @@ class Code:
             'Change_Month_Percent': []
         }
         
-        # Calculate dates
-        today = datetime.now()
+        # Set timezone to match yfinance data (Asia/Kolkata for NSE)
+        tz = pytz.timezone('Asia/Kolkata')
+        today = datetime.now(tz)
         yesterday = today - timedelta(days=1)
         week_ago = today - timedelta(days=7)
         month_ago = today - timedelta(days=30)
@@ -31,17 +33,19 @@ class Code:
                 hist = stock.history(period="1mo")
                 
                 if not hist.empty and len(hist) >= 2:
-                    price_today = hist['Close'][-1]
-                    price_yesterday = hist['Close'][-2]
+                    # Use iloc for positional access
+                    price_today = hist['Close'].iloc[-1]
+                    price_yesterday = hist['Close'].iloc[-2]
                     
+                    # Ensure index is timezone-aware for comparison
                     week_data = hist[hist.index >= week_ago]
                     if not week_data.empty:
-                        week_start = week_data['Close'][0]
+                        week_start = week_data['Close'].iloc[0]
                         week_change = ((price_today - week_start) / week_start) * 100
                     else:
                         week_change = None
                         
-                    month_start = hist['Close'][0]
+                    month_start = hist['Close'].iloc[0]
                     month_change = ((price_today - month_start) / month_start) * 100
                     
                     stock_data['Name'].append(symbol)
