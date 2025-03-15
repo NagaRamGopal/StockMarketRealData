@@ -7,7 +7,7 @@ import pytz  # Add this for timezone handling
 class Code:
     def Data_Collection(self):
         # Sample list of NSE symbols (replace with complete list)
-        nse_stocks = ['RELIANCE', 'TCS', 'HDFCBANK', 'INFY', 'HINDUNILVR']
+        nse_stocks = ['KELLTONTEC', 'GREENPOWER', 'MOSCHIP']
         
         # Prepare data storage
         stock_data = {
